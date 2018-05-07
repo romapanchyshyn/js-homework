@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by romapanchyshyn (http://jsbin.com/kagavah/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+</head>
+
+<body>
+    <h2>Add new bookmarks</h2>
+    <!-- Форма для зберігання закладки -->
+    <form id="bk">
+        <input name="title" />
+        <input name="url" />
+        <button onclick="addBookmark(event)">Save</button>
+    </form>
+
+    <!-- Список збережених закладок -->
+    <h2>Your bookmarks</h2>
+    <p>Count of your bookmarks: <span id="count"></span></p>
+    <div class="bookmark-list">
+        <!-- Виводити як лінки, при кліки відкривати в новій вкладці -->
+    </div>
+    <script id="jsbin-javascript">
+        renderBookmarkList();
+        renderListCount();
+        // 1. Додати нову закладку в список
+        function addBookmark(e) {
+            e.preventDefault();
+            if (validate(document.forms["bk"].elements["url"].value) &&
+                validate(document.forms["bk"].elements["title"].value)) {
+                pasteElement(document.forms["bk"].elements["url"].value,
+                    document.forms["bk"].elements["title"].value);
+                renderListCount();
+            } else {
+                alert("ERROR: Empty field");
+            }
+
+        }
+
+        function pasteElement(title, link) {
+            var a = document.createElement('a');
+            var br = document.createElement('br');
+            attrLink = document.createAttribute("href");
+            attrLink.value = link;
+            a.setAttributeNode(attrLink);
+            attrTarget = document.createAttribute("target");
+            attrTarget.value = "_blank";
+            a.setAttributeNode(attrTarget);
+            a.innerHTML = title;
+            document.getElementsByClassName("bookmark-list")[0].appendChild(a);
+            document.getElementsByClassName("bookmark-list")[0].appendChild(br);
+            localStorage.setItem(a.innerHTML, attrLink.value);
+
+        }
+        // 2. Змінити відображеня кількості
+        function renderListCount() {
+            document.getElementById("count").innerHTML =
+                document.querySelectorAll("div[class='bookmark-list'] > a").length;
+            return false;
+
+        }
+
+        // 3. Валідувати дані, щоб не можна було
+        // зберегти пусті поля і неправильну адресу
+        // return true/false
+        function validate(field) {
+
+            return field;
+
+        }
+
+
+        //Коли відкриваєте сторінку первірити чи є
+        // дані в localeStorage, якщо так відобразити їх,
+        // якщо ні вивести повідомлення, що у вас немає збережених 
+        // заклдок
+        function renderBookmarkList() {
+            if (localStorage.length != 0) {
+                for (var i = 0; i < localStorage.length; i++) {
+                    pasteElement(localStorage.key(i), localStorage.getItem(localStorage.key(i)));
+                }
+            } else
+                alert("Local Storage is Empty");
+
+        }
+
+    </script>
+</body>
+
+</html>

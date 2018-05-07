@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>JS Homework 2: querySelector, date, timeout</title>
+</head>
+
+<body>
+    <!-- Task 2  -->
+    <h1>World time</h1>
+    <ul>
+        <li data-location="london">London - <span class="time">null</span></li>
+        <li data-location="kiev">Kiev - <span class="time">null</span></li>
+        <li data-location="warshawa">Warshawa - <span class="time">null</span></li>
+        <li data-location="los angeles">Los Angeles - <span class="time">null</span></li>
+        <li data-location="new york">New York - <span class="time">null</span></li>
+    </ul>
+
+    <script>
+        // вивести для кожного міста час і дату
+        // формат 24.09.2017 - 15:40
+        function calcTime(offset) {
+            var d = new Date();
+            localTime = d.getTime();
+            localOffset = d.getTimezoneOffset() * 60000;
+
+            // obtain UTC time in msec
+            utc = localTime + localOffset;
+            // create new Date object for different city
+            // using supplied offset
+            var nd = new Date(utc + (3600000 * offset));
+            //nd = 3600000 + nd;
+            day = nd.getDate();
+            month = nd.getMonth() + 1;
+            year = nd.getFullYear();
+            hours = nd.getHours();
+            minutes = nd.getMinutes();
+
+            return day + "." + month + "." + year + " - " + hours + ":" + minutes;
+        }
+        var times = document.getElementsByTagName('span');
+        times[0].innerHTML = calcTime('+1');
+        times[1].innerHTML = calcTime('+3');
+        times[2].innerHTML = calcTime('+2');
+        times[3].innerHTML = calcTime('-7');
+        times[4].innerHTML = calcTime('-4');
+    </script>
+</body>
+
+</html>
